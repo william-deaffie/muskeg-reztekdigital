@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Muskeg | CFL Stream • Treaty 1 Territory</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa+sans-serif:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            /* The Ancient (Organic) */
+            --muskeg-black: #1A1918;
+            --muskeg-black-2: #232120;
+            --lichen-grey: #8C8A86;
+            --spruce-needle: #2C3E2E;
+            --spruce-light: #4A6350;
+            --raw-bone: #EBE7DE;
+
+            /* The Modern (Digital) — one accent, used deliberately */
+            --signal-red: #EF4444;
+
+            /* Bombers colours, reserved for the matchup only */
+            --bombers-blue: #041E42;
+            --bombers-gold: #C8A572;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--muskeg-black);
+            color: var(--raw-bone);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Organic Noise Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.35;
+        }
+
+        /* Topography x Circuitry background — muted, not glowing */
+        .circuit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(90deg, rgba(140, 138, 134, 0.05) 1px, transparent 1px),
+                linear-gradient(rgba(140, 138, 134, 0.05) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--muskeg-black) 0%, var(--muskeg-black-2) 100%);
+            border-bottom: 2px solid var(--signal-red);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .brand-logo {
+            width: 85px;
+            height: 85px;
+            flex-shrink: 0;
+            background: url('brand-logo.png') center/contain no-repeat;
+            filter: drop-shadow(0 0 0 transparent);
+        }
+
+        .brand-text h1 {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--raw-bone);
+            text-transform: uppercase;
+        }
+
+        .brand-text .tagline {
+            color: var(--lichen-grey);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            letter-spacing: 2px;
+        }
+
+        .territory-badge {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid var(--signal-red);
+            color: var(--signal-red);
+            padding: 0.75rem 1.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--muskeg-black);
+            border-bottom: 1px solid var(--lichen-grey);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            color: var(--lichen-grey);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transition: background-color 0.1s, color 0.1s;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+        }
+
+        /* Brutalist "Trigger" hover — hard invert, no glow */
+        nav a:hover {
+            color: var(--muskeg-black);
+            background: var(--raw-bone);
+            border: 1px solid var(--raw-bone);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--signal-red);
+            color: var(--raw-bone);
+            letter-spacing: 2px;
+        }
+
+        .section-title::before {
+            content: '// ';
+            color: var(--spruce-light);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 400;
+        }
+
+        /* Matchup Banner */
+        .matchup-banner {
+            background: linear-gradient(90deg, var(--bombers-blue) 0%, var(--muskeg-black) 50%, #6b1414 100%);
+            border: 2px solid var(--bombers-gold);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            position: relative;
+        }
+
+        .team {
+            text-align: center;
+        }
+
+        .team-logo {
+            width: 110px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            background: rgba(235, 231, 222, 0.95);
+            border: 3px solid var(--bombers-gold);
+            padding: 12px;
+        }
+
+        .team-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .team-name {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--raw-bone);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .vs {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--bombers-gold);
+            border: 3px solid var(--bombers-gold);
+            padding: 1rem 2rem;
+            background: var(--muskeg-black);
+        }
+
+        /* Video Container - The Artifact */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: var(--muskeg-black);
+            border: 2px solid var(--signal-red);
+            margin-bottom: 1.5rem;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .stream-info {
+            background: rgba(44, 62, 46, 0.35);
+            border-left: 4px solid var(--spruce-light);
+            padding: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .stream-info h3 {
+            color: var(--raw-bone);
+            margin-bottom: 0.5rem;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 1.25rem;
+        }
+
+        .stream-meta {
+            color: var(--lichen-grey);
+            margin-top: 0.5rem;
+        }
+
+        /* Roster Tables */
+        .roster-container {
+            background: var(--raw-bone);
+            color: var(--muskeg-black);
+            border: 1px solid var(--lichen-grey);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .roster-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--lichen-grey);
+        }
+
+        .roster-section:last-child {
+            border-bottom: none;
+        }
+
+        .roster-section h3 {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 1.5rem;
+            color: var(--muskeg-black);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--signal-red);
+        }
+
+        .roster-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .roster-table th {
+            background: var(--muskeg-black);
+            color: var(--bombers-gold);
+            padding: 0.75rem;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        .roster-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--lichen-grey);
+            color: var(--muskeg-black);
+        }
+
+        .roster-table tr:hover td {
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--muskeg-black);
+            border-top: 2px solid var(--signal-red);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle Bombers pattern watermark, kept quiet */
+        footer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('wpg-pattern.png') center/300px repeat;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            position: relative;
+        }
+
+        .footer-section h3 {
+            font-family: 'Comfortaa', sans-serif;
+            color: var(--raw-bone);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--lichen-grey);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--signal-red);
+        }
+
+        .indigenous-badge {
+            display: inline-block;
+            background: rgba(200, 165, 114, 0.12);
+            border: 1px solid var(--bombers-gold);
+            color: var(--bombers-gold);
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--lichen-grey);
+            text-align: center;
+            color: var(--lichen-grey);
+            font-size: 0.8rem;
+            position: relative;
+        }
+
+        /* Glitch Effect on Hover — kept subtle, brand-tied */
+        .glitch-hover:hover {
+            animation: glitch 0.3s ease-in-out;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .brand-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .matchup-banner {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .team-logo {
+                width: 90px;
+                height: 90px;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="circuit-bg"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="brand">
+                <div class="brand-logo"></div>
+                <div class="brand-text">
+                    <h1>Digital Muskeg</h1>
+                    <p class="tagline">Ancient Roots • Digital Future</p>
+                </div>
+            </div>
+            <div class="territory-badge">Treaty 1 Territory • Winnipeg, MB</div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#stream">/// Live Stream</a></li>
+            <li><a href="#matchup">/// Matchup</a></li>
+            <li><a href="#bombers">/// Bombers Roster</a></li>
+            <li><a href="#redblacks">/// Redblacks Roster</a></li>
+            <li><a href="#contact">/// Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Matchup Section -->
+        <section id="matchup">
+            <div class="matchup-banner">
+                <div class="team wpg">
+                    <div class="team-logo"><img src="wpg-logo.png" alt="Winnipeg Blue Bombers logo"></div>
+                    <div class="team-name">Blue Bombers</div>
+                </div>
+                <div class="vs">VS</div>
+                <div class="team ott">
+                    <div class="team-logo"><img src="ott-logo.png" alt="Ottawa Redblacks logo"></div>
+                    <div class="team-name">Redblacks</div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Live Stream Section -->
+        <section id="stream">
+            <h2 class="section-title">/// Live Stream</h2>
+            <div class="video-wrapper">
+                <iframe src="https://dlhd.st/stream/stream-111.php" width="100%" height="100%" style="border:0;" allowfullscreen="yes" allowpresentation="yes"></iframe>
+            </div>
+            <div class="stream-info">
+                <h3>Winnipeg Blue Bombers vs Ottawa REDBLACKS</h3>
+                <p>CFL 2026 Season • Live Broadcast</p>
+                <p class="stream-meta">Powered by RezTek Digital • Code as Craft</p>
+            </div>
+        </section>
+
+
+        <!-- Blue Bombers Roster -->
+        <section id="bombers">
+            <h2 class="section-title">/// Blue Bombers Roster</h2>
+            <div class="roster-container">
+                <div class="roster-section">
+                    <h3>Active Roster</h3>
+                    <table class="roster-table">
+                        <thead>
+                            <tr><th>NO</th><th>NAME</th><th>POS</th><th>A/N/G</th><th>HT</th><th>WT</th><th>AGE</th><th>COLLEGE</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>49</td><td>AYERS, Michael</td><td>LB</td><td>A</td><td>6'2</td><td>226</td><td>27</td><td>Ashland</td></tr>
+                            <tr><td>52</td><td>BOULIANE, Charles-Elliot</td><td>LB</td><td>N</td><td>5'11</td><td>228</td><td>24</td><td>Montreal</td></tr>
+                            <tr><td>4</td><td>BROWN, Dru</td><td>QB</td><td>A</td><td>5'11</td><td>200</td><td>29</td><td>Oklahoma State</td></tr>
+                            <tr><td>10</td><td>DEMSKI, Nic</td><td>WR</td><td>N</td><td>5'11</td><td>211</td><td>32</td><td>Manitoba</td></tr>
+                            <tr><td>8</td><td>COLLAROS, Zach</td><td>QB</td><td>A</td><td>6'1</td><td>218</td><td>37</td><td>Cincinnati</td></tr>
+                            <tr><td>20</td><td>OLIVEIRA, Brady</td><td>RB</td><td>N</td><td>5'10</td><td>226</td><td>28</td><td>North Dakota</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Redblacks Roster -->
+        <section id="redblacks">
+            <h2 class="section-title">/// Redblacks Roster</h2>
+            <div class="roster-container">
+                <div class="roster-section">
+                    <h3>Active Roster</h3>
+                    <table class="roster-table">
+                        <thead>
+                            <tr><th>NO</th><th>NAME</th><th>POS</th><th>A/N/G</th><th>HT</th><th>WT</th><th>AGE</th><th>COLLEGE</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>10</td><td>BETHEL-THOMPSON, McLeod</td><td>QB</td><td>A</td><td>6'3</td><td>230</td><td>38</td><td>Sacramento State</td></tr>
+                            <tr><td>87</td><td>LEWIS, Eugene</td><td>WR</td><td>A</td><td>6'0</td><td>200</td><td>33</td><td>Oklahoma</td></tr>
+                            <tr><td>83</td><td>PIMPLETON, Kalil</td><td>WR</td><td>A</td><td>5'8</td><td>175</td><td>27</td><td>Central Michigan</td></tr>
+                            <tr><td>20</td><td>ADDAE, Alonzo</td><td>DB</td><td>N</td><td>5'11</td><td>192</td><td>29</td><td>West Virginia</td></tr>
+                            <tr><td>44</td><td>VILAIN, Luiji</td><td>DL</td><td>N</td><td>6'4</td><td>255</td><td>28</td><td>Wake Forest</td></tr>
+                            <tr><td>21</td><td>LAUTHER, Brett</td><td>K</td><td>N</td><td>6'0</td><td>195</td><td>35</td><td>Saint Mary's</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 style="font-family: 'Comfortaa', sans-serif; font-size: 1.5rem;">REZTEK/DIGITAL</h3>
+                <p>Code as Craft</p>
+                <p>Web Design & Development</p>
+                <p>Branding • Marketing</p>
+                <span class="indigenous-badge">100% Indigenous Owned</span>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p><a href="mailto:hello@reztekdigital.com">hello@reztekdigital.com</a></p>
+                <p><a href="https://www.reztekdigital.com">www.reztekdigital.com</a></p>
+                <p>Treaty 1 Territory<br>Winnipeg, Manitoba</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <a href="#" class="glitch-hover">Reddit</a>
+                <a href="#" class="glitch-hover">Mastodon</a>
+                <a href="#" class="glitch-hover">Bluesky</a>
+                <a href="#" class="glitch-hover">GitHub</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Services</h3>
+                <p>Single Page Sites</p>
+                <p>Full Site Development</p>
+                <p>E-commerce Solutions</p>
+                <p>SEO/AEO Optimization</p>
+                <p>Hosting & Maintenance</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 RezTek Digital • Code as Craft • Respect the Land • Respect the Game</p>
+            <p style="margin-top: 0.5rem;">Built on Treaty 1 Territory • Member of Norway House Cree Nation</p>
+        </div>
+    </footer>
+
+</body>
+</html>
