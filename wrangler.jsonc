@@ -7,8 +7,8 @@
   "compatibility_date": "2026-07-18",
   "workers_dev": false,
   "route": {
-    "pattern": "example.org/*",
-    "zone_name": "example.org",
+    "pattern": "reztekdigital.com/*",
+    "zone_name": "reztekdigital.com",
   },
   "kv_namespaces": [
     {
@@ -20,8 +20,8 @@
     "staging": {
       "name": "my-worker-staging",
       "route": {
-        "pattern": "staging.example.org/*",
-        "zone_name": "example.org",
+        "pattern": "muskeg.reztekdigital.com/*",
+        "zone_name": "reztekdigital.com",
       },
       "kv_namespaces": [
         {
